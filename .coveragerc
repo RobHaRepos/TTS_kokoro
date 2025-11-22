@@ -1,0 +1,13 @@
+[run]
+omit =
+    kokoro/*
+    kokoro/**
+    tests/*
+    .venv/*
+    */__init__.py
+
+[report]
+exclude_lines =
+    # Don't complain about missing debug-only code
+    pragma: no cover
+    if __name__ == .__main__.:  # pragma: no cover

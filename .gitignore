@@ -1,2 +1,11 @@
 *.wav
 *.pyc
+.coverage
+coverage.xml
+__pycache__/
+.vscode/
+tests/__pycache__/
+tests/*.pyc
+tests/.pytest_cache/
+.env/
+.venv/
