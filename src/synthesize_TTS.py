@@ -3,6 +3,7 @@ import soundfile
 from pathlib import Path
 import logging
 import os
+from typing import Optional
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = REPO_ROOT / 'output'
@@ -17,9 +18,11 @@ _PIPELINE = KPipeline
 
 logger = logging.getLogger("synthesize_service")
 
-def get_pipeline(lang_code: str = LANG_CODE, repo_id: str = 'hexgrad/Kokoro-82M', device: str = DEVICE):
+def get_pipeline(lang_code: str = LANG_CODE, repo_id: str = 'hexgrad/Kokoro-82M', device: Optional[str] = None):
     """Get Kokoro TTS pipeline."""
     global _PIPELINE
+    if device is None:
+        device = DEVICE
     if _PIPELINE is not None:
         _PIPELINE = KPipeline(lang_code=lang_code, repo_id=repo_id, device=device)
     
