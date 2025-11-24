@@ -81,6 +81,8 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
-          # Run Snyk against the CI requirements (omits heavy runtime ML deps like torch)
+          # Run Snyk against the CI requirements (omits heavy runtime ML deps like torch).
+          # Use a Snyk-specific requirements file that excludes heavy ML/runtime packages
+          # so Snyk focuses on typical Python packages and avoids scanning compiled Torch C code.
           # explicitly tell Snyk this is a pip/requirements file so it detects the package manager
-          snyk test --file=requirements-ci.txt --package-manager=pip
+          snyk test --file=requirements-ci-snyk.txt --package-manager=pip
