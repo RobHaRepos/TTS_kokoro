@@ -24,7 +24,7 @@ SAMPLE_RATE = int(os.getenv("SAMPLE_RATE", 24000))
 SPEED = float(os.getenv("SPEED", 1.0))
 LANG_CODE = os.getenv("LANG_CODE", "a")
 DEVICE = os.getenv("DEVICE", "cuda")
-LOGGER_SERVICE_URL = os.getenv("LOGGER_SERVICE_URL", "http://logger_service:8004")
+LOGGER_SERVICE_URL = os.getenv("LOGGER_SERVICE_URL", "https://logger_service:8004")
 
 logger = logging.getLogger("synthesize_service")
 handler = logging.StreamHandler()
