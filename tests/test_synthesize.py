@@ -10,7 +10,7 @@ def fake_pipeline_generator(text, voice=None, speed=None):
     
 def test_get_pipeline():
     """Test getting the Kokoro TTS pipeline."""
-    pipeline = get_pipeline(lang_code='a', repo_id='hexgrad/Kokoro-82M', device='cuda')
+    pipeline = get_pipeline(lang_code='a', repo_id='hexgrad/Kokoro-82M', device='cpu')
     assert pipeline is not None
     assert pipeline.lang_code == 'a'
     assert pipeline.repo_id == 'hexgrad/Kokoro-82M'
