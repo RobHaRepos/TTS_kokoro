@@ -1,14 +1,22 @@
 from kokoro import KPipeline
 import soundfile
 from pathlib import Path
+import logging
+import os
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = REPO_ROOT / 'output'
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+SAMPLE_RATE = int(os.getenv("SAMPLE_RATE", 24000))
+SPEED = float(os.getenv("SPEED", 1.0))
+VOICE = os.getenv("VOICE", "am_onyx")
+LANG_CODE = os.getenv("LANG_CODE", "a")
 
 _PIPELINE = KPipeline
 
-def get_pipeline(lang_code: str = 'a', repo_id: str = 'hexgrad/Kokoro-82M', device: str = 'cuda'):
+logger = logging.getLogger("synthesize_service")
+
+def get_pipeline(lang_code: str = LANG_CODE, repo_id: str = 'hexgrad/Kokoro-82M', device: str = 'cuda'):
     """Get Kokoro TTS pipeline."""
     global _PIPELINE
     if _PIPELINE is not None:
@@ -16,7 +24,7 @@ def get_pipeline(lang_code: str = 'a', repo_id: str = 'hexgrad/Kokoro-82M', devi
     
     return _PIPELINE
 
-def synthesize_text(text: str, voice: str = "am_onyx", speed: float = 1.0, lang_code: str = 'a', local_save: bool = False):
+def synthesize_text(text: str, voice: str = VOICE, speed: float = SPEED, lang_code: str = LANG_CODE, local_save: bool = False):
     """Synthesize speech from text using Kokoro TTS model."""
     audio, graphemes, phonemes = None, None, None
     try:
@@ -27,11 +35,15 @@ def synthesize_text(text: str, voice: str = "am_onyx", speed: float = 1.0, lang_
             speed=speed
             )
 
+        logger.info(f"Synthesizing text: {text} with voice: {voice} at speed: {speed}")
+        
         for i, (graphemes, phonemes, audio) in enumerate(generator):
             if audio is None:
                 continue
             if local_save:
-                soundfile.write(f'{OUTPUT_DIR}/synthesized.wav', audio, 24000)
+                soundfile.write(f'{OUTPUT_DIR}/synthesized.wav', audio, SAMPLE_RATE)
+        
+        logger.info(f"Synthesis complete for text: {text}")
                 
         return audio, graphemes, phonemes
             

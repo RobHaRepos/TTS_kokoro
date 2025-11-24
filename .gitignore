@@ -9,3 +9,4 @@ tests/*.pyc
 tests/.pytest_cache/
 .env/
 .venv/
+.pytest_cache/

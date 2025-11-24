@@ -1,0 +1,39 @@
+services:
+  tts_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "${DOCKER_IMAGE_NAME:-tts_kokoro}:latest"
+    ports:
+      - "8005:8005"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    environment:
+      SERVICE_NAME: "tts_service"
+      LOGGER_SERVICE_URL: "http://logger_service:8004"
+      VOICE: "am-onyx"
+      SAMPLE_RATE: "24000"
+      SPEED: "1.0"
+      LANG_CODE: "a"
+      DEVICE: "cuda"
+    networks:
+      - tts_kokoro_network
+      - logger_network  # Add the network where logger_service is running
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8005/health || exit 1"]
+      interval: 55s
+      timeout: 5s
+      retries: 6
+    restart: unless-stopped
+
+networks:
+  tts_kokoro_network:
+    name: tts_kokoro_network
+  logger_network:
+    external: true
+    name: chatbot_rag_net

@@ -25,11 +25,27 @@ def test_synthesize_text_happy():
     assert len(audio) > 0
     
 def test_synthesize_text_sad(monkeypatch):
-    """Test synthesizing text with failure."""
+    """Test synthesizing text fails when get_pipeline returns None."""
     monkeypatch.setattr('src.synthesize_TTS.get_pipeline', lambda *args, **kwargs: None, raising=False)
     with pytest.raises(RuntimeError) as excinfo:
         synthesize_text('This will fail', voice='am_onyx', speed=1.0, lang_code='a', local_save=False)
     assert "No audio generated." in str(excinfo.value)
+
+    def fake_none_gen(text, voice=None, speed=None):
+        yield "G1", "P1", None
+        yield "G2", "P2", None
+
+    monkeypatch.setattr(
+        'src.synthesize_TTS.get_pipeline',
+        lambda *args, **kwargs: (lambda text, voice=None, speed=None: fake_none_gen(text, voice, speed)),
+        raising=False,
+    )
+
+    audio, graphemes, phonemes = synthesize_text(
+        'This will have None audio yields', voice='am_onyx', speed=1.0, lang_code='a', local_save=False)
+    assert audio is None
+    assert graphemes == 'G2'
+    assert phonemes == 'P2'
     
 def test_local_save(monkeypatch, tmp_path):
     """Test local saving of synthesized audio."""
@@ -50,3 +66,4 @@ def test_local_save(monkeypatch, tmp_path):
     data, sr = soundfile.read(saved_file)
     assert sr == 24000
     assert data.size > 0
+    
