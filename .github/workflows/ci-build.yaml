@@ -59,7 +59,7 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602 # v6.0.0
         with:
           args: 
-            -Dsonar.projectKey=${{ secrets.TTS_KOKORO }} -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.projectKey=RobHaRepos_TTS_kokoro -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} -Dsonar.token=${{ secrets.SONAR_TOKEN }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
