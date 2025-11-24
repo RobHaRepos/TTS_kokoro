@@ -23,6 +23,7 @@ VOICE = os.getenv("VOICE", "am_onyx")
 SAMPLE_RATE = int(os.getenv("SAMPLE_RATE", 24000))
 SPEED = float(os.getenv("SPEED", 1.0))
 LANG_CODE = os.getenv("LANG_CODE", "a")
+DEVICE = os.getenv("DEVICE", "cuda")
 LOGGER_SERVICE_URL = os.getenv("LOGGER_SERVICE_URL", "http://logger_service:8004")
 
 logger = logging.getLogger("synthesize_service")
@@ -52,7 +53,8 @@ class SynthesizeRequest(BaseModel):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize Kokoro TTS pipeline on startup."""
-    get_pipeline(lang_code=LANG_CODE, repo_id='hexgrad/Kokoro-82M', device='cuda')
+    logger.info(f"Initializing Kokoro TTS pipeline with device: {DEVICE}")
+    get_pipeline(lang_code=LANG_CODE, repo_id='hexgrad/Kokoro-82M', device=DEVICE)
     try:
         yield
     finally:

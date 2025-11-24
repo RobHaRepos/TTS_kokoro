@@ -85,7 +85,9 @@ def test_synthesize_invalid_audio_type(monkeypatch):
     assert data["code"] == "SYNTHESIS_FAILED"
     assert data["details"] == "Generated audio data is invalid or empty."
     
-def test_lifespan():
+def test_lifespan(monkeypatch):
+    # Force CPU mode for CI environments without CUDA
+    monkeypatch.setattr('src.api.api.DEVICE', 'cpu')
     with TestClient(app) as client:
         input_text = "Test"
         response = client.post("/synthesize", json={"text": input_text})
