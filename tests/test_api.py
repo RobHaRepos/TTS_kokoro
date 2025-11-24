@@ -28,7 +28,7 @@ def test_synthesize_happy(monkeypatch):
     assert response.headers["content-type"].startswith("audio/wav")
     
     wav_bytes = io.BytesIO(response.content)
-    data, samplerate = soundfile.read(wav_bytes)
+    data, samplerate = soundfile.read(wav_bytes)  # type: ignore
     assert samplerate == 24000
     assert data.size > 0
     

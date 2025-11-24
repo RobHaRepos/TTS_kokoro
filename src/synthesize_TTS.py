@@ -11,12 +11,13 @@ SAMPLE_RATE = int(os.getenv("SAMPLE_RATE", 24000))
 SPEED = float(os.getenv("SPEED", 1.0))
 VOICE = os.getenv("VOICE", "am_onyx")
 LANG_CODE = os.getenv("LANG_CODE", "a")
+DEVICE = os.getenv("DEVICE", "cuda")
 
 _PIPELINE = KPipeline
 
 logger = logging.getLogger("synthesize_service")
 
-def get_pipeline(lang_code: str = LANG_CODE, repo_id: str = 'hexgrad/Kokoro-82M', device: str = 'cuda'):
+def get_pipeline(lang_code: str = LANG_CODE, repo_id: str = 'hexgrad/Kokoro-82M', device: str = DEVICE):
     """Get Kokoro TTS pipeline."""
     global _PIPELINE
     if _PIPELINE is not None:

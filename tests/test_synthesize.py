@@ -15,8 +15,9 @@ def test_get_pipeline():
     assert pipeline.lang_code == 'a'
     assert pipeline.repo_id == 'hexgrad/Kokoro-82M'
     
-def test_synthesize_text_happy():
+def test_synthesize_text_happy(monkeypatch):
     """Test synthesizing text successfully."""
+    monkeypatch.setattr('src.synthesize_TTS.DEVICE', 'cpu')
     text = 'Hello, this is a test of the Kokoro TTS system.'
     audio, graphemes, phonemes = synthesize_text(text, voice='am_onyx', speed=1.0, lang_code='a', local_save=False)
     assert audio is not None
