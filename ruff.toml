@@ -1,4 +1,4 @@
 # Ruff configuration
 [lint]
 # Exclude the kokoro submodule from linting
-exclude = ["kokoro/"]
+exclude = ["kokoro/**"]
