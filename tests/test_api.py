@@ -88,6 +88,13 @@ def test_synthesize_invalid_audio_type(monkeypatch):
 def test_lifespan(monkeypatch):
     # Force CPU mode for CI environments without CUDA
     monkeypatch.setattr('src.api.api.DEVICE', 'cpu')
+    
+    def fake_synthesize_text(text, voice=None, speed=None):
+        audio = torch.zeros(24000, dtype=torch.float32)
+        return audio, "Graphemes", "Phonemes"
+    
+    monkeypatch.setattr("src.api.api.synthesize_text", fake_synthesize_text)
+    
     with TestClient(app) as client:
         input_text = "Test"
         response = client.post("/synthesize", json={"text": input_text})
