@@ -13,6 +13,8 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+        limits:
+          memory: 1G
     environment:
       SERVICE_NAME: "tts_service"
       LOGGER_SERVICE_URL: "http://logger_service:8004"
@@ -21,14 +23,17 @@ services:
       SPEED: "1.0"
       LANG_CODE: "a"
       DEVICE: "cuda"
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
     networks:
       - tts_kokoro_network
       - logger_network  # Add the network where logger_service is running
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8005/health || exit 1"]
-      interval: 55s
-      timeout: 5s
-      retries: 6
+      interval: 90s
+      timeout: 10s
+      retries: 3
     restart: unless-stopped
 
 networks:

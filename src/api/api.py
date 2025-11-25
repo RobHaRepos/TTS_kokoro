@@ -26,6 +26,12 @@ LANG_CODE = os.getenv("LANG_CODE", "a")
 DEVICE = os.getenv("DEVICE", "cuda")
 LOGGER_SERVICE_URL = os.getenv("LOGGER_SERVICE_URL", "https://logger_service:8004")
 
+os.environ.setdefault('OMP_NUM_THREADS','1')
+os.environ.setdefault('OPENBLAS_NUM_THREADS','1')
+os.environ.setdefault('MKL_NUM_THREADS','1')
+torch.set_num_threads(1)
+torch.set_num_interop_threads(1)
+
 logger = logging.getLogger("synthesize_service")
 handler = logging.StreamHandler()
 formatter = logging.Formatter("%(asctime)s %(levelname)s %(name)s - %(message)s")

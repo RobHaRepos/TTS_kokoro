@@ -7,5 +7,13 @@
     "sonarlint.connectedMode.project": {
         "connectionId": "robharepos",
         "projectKey": "RobHaRepos_TTS_kokoro"
-    }
+    },
+    "python.analysis.exclude": [
+        "kokoro",
+        "kokoro/**",
+        "kokoro/kokoro/pipeline.py"
+    ],
+    "python.analysis.ignore": [
+        "kokoro/**"
+    ]
 }
