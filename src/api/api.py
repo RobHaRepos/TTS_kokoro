@@ -124,7 +124,7 @@ async def synthesize(request: SynthesizeRequest):
     buffer.seek(0)
     return StreamingResponse(buffer, media_type="audio/wav")
     
-@app.post("/health")
+@app.get("/health")
 async def health():
     """Health check endpoint."""
     return {"status": "ok"}
