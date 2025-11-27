@@ -2,10 +2,25 @@ from src.synthesize_TTS import get_pipeline, synthesize_text
 import pytest
 import numpy as np
 import soundfile
+import torch
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class MockOutput:
+    audio: Optional[np.ndarray]
+    pred_dur: Optional[torch.LongTensor] = None
+
+@dataclass
+class MockResult:
+    graphemes: str
+    phonemes: str
+    output: Optional[MockOutput] = None
 
 def fake_pipeline_generator(text, voice=None, speed=None):
-    audio = np.zeros(24000 // 2, dtype='float32') 
-    yield "Graphemes", "Phonemes", audio
+    audio = np.zeros(24000 // 2, dtype='float32')
+    output = MockOutput(audio=audio)
+    yield MockResult(graphemes="Graphemes", phonemes="Phonemes", output=output)
     
     
 def test_get_pipeline():
@@ -33,8 +48,8 @@ def test_synthesize_text_sad(monkeypatch):
     assert "No audio generated." in str(excinfo.value)
 
     def fake_none_gen(text, voice=None, speed=None):
-        yield "G1", "P1", None
-        yield "G2", "P2", None
+        yield MockResult(graphemes="G1", phonemes="P1", output=None)
+        yield MockResult(graphemes="G2", phonemes="P2", output=None)
 
     monkeypatch.setattr(
         'src.synthesize_TTS.get_pipeline',

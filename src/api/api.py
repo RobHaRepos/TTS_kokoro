@@ -39,7 +39,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 remote = HTTPLogHandler(LOGGER_SERVICE_URL)
 logger.addHandler(remote)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 
 class SynthesizeRequest(BaseModel):
